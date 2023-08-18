@@ -1,1 +1,1 @@
-# pokemon-go-discord-quiz-bot
+# Pokémon Go Discord Quiz Bot
