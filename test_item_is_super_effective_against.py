@@ -39,3 +39,15 @@ def test_item_correct_answer_contains_all_correct_types(item):
     correct_answer = item.correct_answer()
     for t in item.atypes_correct:
         assert t in correct_answer
+
+
+def test_item_empty_answer_is_not_correct(item):
+    assert not item.is_answer_correct('')
+
+
+def test_item_answer_correct_with_correct_types(item):
+    assert item.is_answer_correct(' '.join(item.atypes_correct))
+
+
+def test_item_answer_all_types_is_not_correct(item):
+    assert not item.is_answer_correct(' '.join(item.atypes_all))

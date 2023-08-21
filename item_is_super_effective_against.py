@@ -30,3 +30,18 @@ class IsSuperEffectiveAgainst:
     def correct_answer(self):
         atypes_correct_str = ', '.join(self.atypes_correct)
         return f'{self.qtype} is super effective against {atypes_correct_str}.'
+
+    def is_answer_correct(self, answer):
+        # split answer in words and capitalise like the types in
+        # pogoapi and remove duplicates
+        words = set(map(lambda w: w.capitalize(), answer.split()))
+
+        # filter out all types
+        words = words.intersection(self.atypes_all)
+
+        # filter out the correct types
+        if len(words) == len(self.atypes_correct):
+            words = words.intersection(self.atypes_correct)
+
+        # make sure to have all the correct types
+        return len(words) == len(self.atypes_correct)
