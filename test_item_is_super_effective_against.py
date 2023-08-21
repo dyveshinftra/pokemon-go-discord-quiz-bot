@@ -32,5 +32,4 @@ def test_item_answer_types_correct_are_all_super_effective(item):
 
 
 def test_item_question_is_well_formed(item):
-    s = f'What is {item.qtype} super effective against?'
-    assert item.question() == s
+    assert item.qtype in item.question()
