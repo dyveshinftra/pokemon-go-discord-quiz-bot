@@ -18,7 +18,7 @@ def test_item_question_type_exist(item):
 
 
 def test_item_answer_types_all_matches_all_types(item):
-    assert item.atypes_all == list(pogoapi.type_effectiveness.keys())
+    assert item.get_all_answer_words() == pogoapi.type_effectiveness.keys()
 
 
 def test_item_answer_types_correct_has_at_least_one_type(item):
@@ -50,4 +50,4 @@ def test_item_answer_correct_with_correct_types(item):
 
 
 def test_item_answer_all_types_is_not_correct(item):
-    assert not item.is_answer_correct(' '.join(item.atypes_all))
+    assert not item.is_answer_correct(' '.join(item.get_all_answer_words()))

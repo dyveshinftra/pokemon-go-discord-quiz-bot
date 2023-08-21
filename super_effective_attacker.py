@@ -15,9 +15,6 @@ class SuperEffectiveAttacker:
         qtype.remove('Normal')
         self.qtype = random.choice(qtype)
 
-        # all types are possible answers
-        self.atypes_all = all_types
-
         # but these are the correct answers
         self.atypes_correct = [
                 k
@@ -37,7 +34,7 @@ class SuperEffectiveAttacker:
         words = set(map(lambda w: w.capitalize(), answer.split()))
 
         # filter out all types
-        words = words.intersection(self.atypes_all)
+        words = words.intersection(self.get_all_answer_words())
 
         # filter out the correct types
         if len(words) == len(self.atypes_correct):
@@ -45,3 +42,6 @@ class SuperEffectiveAttacker:
 
         # make sure to have all the correct types
         return len(words) == len(self.atypes_correct)
+
+    def get_all_answer_words(self):
+        return pogoapi.type_effectiveness.keys()
