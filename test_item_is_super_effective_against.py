@@ -33,3 +33,9 @@ def test_item_answer_types_correct_are_all_super_effective(item):
 
 def test_item_question_is_well_formed(item):
     assert item.qtype in item.question()
+
+
+def test_item_correct_answer_contains_all_correct_types(item):
+    correct_answer = item.correct_answer()
+    for t in item.atypes_correct:
+        assert t in correct_answer

@@ -26,3 +26,7 @@ class IsSuperEffectiveAgainst:
 
     def question(self):
         return f'What is {self.qtype} super effective against?'
+
+    def correct_answer(self):
+        atypes_correct_str = ', '.join(self.atypes_correct)
+        return f'{self.qtype} is super effective against {atypes_correct_str}.'
