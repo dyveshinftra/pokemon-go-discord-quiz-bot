@@ -30,19 +30,14 @@ async def on_message(message):
     if message.channel.name != 'quiz':
         return
 
-    # start the quiz
-    if not item:
-        item = item_is_super_effective_against.IsSuperEffectiveAgainst()
-        await message.channel.send(item.question())
-        return
+    # check answer if quiz is ongoing
+    if item:
+        if item.is_answer_correct(message.content):
+            await message.channel.send('That is correct!')
+        else:
+            await message.channel.send(item.correct_answer())
 
-    # check answer
-    if item.is_answer_correct(message.content):
-        await message.channel.send('That is correct!')
-    else:
-        await message.channel.send(item.correct_answer())
-
-    # try next item
+    # start new item
     item = item_is_super_effective_against.IsSuperEffectiveAgainst()
     await message.channel.send(item.question())
 
