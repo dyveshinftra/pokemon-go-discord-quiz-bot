@@ -1,6 +1,6 @@
 import discord
 import env
-import item_is_super_effective_against
+import super_effective_attacker
 
 
 intents = discord.Intents.default()
@@ -38,7 +38,7 @@ async def on_message(message):
             await message.channel.send(item.correct_answer())
 
     # start new item
-    item = item_is_super_effective_against.IsSuperEffectiveAgainst()
+    item = super_effective_attacker.IsSuperEffectiveAgainst()
     await message.channel.send(item.question())
 
 

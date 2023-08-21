@@ -1,11 +1,11 @@
-import item_is_super_effective_against
+import super_effective_attacker
 import pogoapi
 import pytest
 
 
 @pytest.fixture
 def item():
-    return item_is_super_effective_against.IsSuperEffectiveAgainst()
+    return super_effective_attacker.IsSuperEffectiveAgainst()
 
 
 # normal is not super effective against any type
