@@ -5,7 +5,7 @@ import pytest
 
 @pytest.fixture
 def item():
-    return super_effective_attacker.IsSuperEffectiveAgainst()
+    return super_effective_attacker.SuperEffectiveAttacker()
 
 
 # normal is not super effective against any type

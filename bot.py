@@ -38,7 +38,7 @@ async def on_message(message):
             await message.channel.send(item.correct_answer())
 
     # start new item
-    item = super_effective_attacker.IsSuperEffectiveAgainst()
+    item = super_effective_attacker.SuperEffectiveAttacker()
     await message.channel.send(item.question())
 
 

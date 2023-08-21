@@ -5,7 +5,7 @@ import pogoapi
 import random
 
 
-class IsSuperEffectiveAgainst:
+class SuperEffectiveAttacker:
 
     def __init__(self):
         all_types = list(pogoapi.type_effectiveness.keys())
