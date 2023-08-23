@@ -36,3 +36,8 @@ def test_item_but_all_possible_solution_is_not_correct(item):
 def test_db_super_effective_attack():
     item = quiz_items.SuperEffectiveAttack('Water')
     assert item.get_solution() == ['Fire', 'Ground', 'Rock']
+
+
+def test_db_super_effective_defense():
+    item = quiz_items.SuperEffectiveDefense('Water')
+    assert item.get_solution() == ['Electric', 'Grass']
