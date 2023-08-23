@@ -1,6 +1,7 @@
 import discord
 import env
-import super_effective_attacker
+import quiz_items
+import random
 
 
 intents = discord.Intents.default()
@@ -11,7 +12,7 @@ client = discord.Client(intents=intents, proxy=env.get('https_proxy'))
 
 
 # current quiz item
-item = None
+quiz_item = None
 
 
 @client.event
@@ -21,7 +22,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    global item
+    global quiz_item
 
     # ignore when it's from us
     if message.author == client.user:
@@ -31,15 +32,15 @@ async def on_message(message):
         return
 
     # check answer if quiz is ongoing
-    if item:
-        if item.is_answer_correct(message.content):
+    if quiz_item:
+        if quiz_item.is_answer_correct(message.content):
             await message.channel.send('That is correct!')
         else:
-            await message.channel.send(item.get_correct_answer())
+            await message.channel.send(quiz_item.give_solution())
 
     # start new item
-    item = super_effective_attacker.SuperEffectiveAttacker()
-    await message.channel.send(item.ask_question())
+    quiz_item = random.choice(quiz_items.get_all_quiz_item_classes())()
+    await message.channel.send(quiz_item.ask_question())
 
 
 client.run(env.get('DISCORD_TOKEN'))
