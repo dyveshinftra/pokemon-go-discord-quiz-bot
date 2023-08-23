@@ -10,11 +10,11 @@ def item():
 
 # normal is not super effective against any type
 def test_item_question_type_is_not_normal(item):
-    assert item.qtype != 'Normal'
+    assert item.get_data() != 'Normal'
 
 
 def test_item_question_type_exist(item):
-    assert item.qtype in pogoapi.type_effectiveness.keys()
+    assert item.get_data() in pogoapi.type_effectiveness.keys()
 
 
 def test_item_answer_types_all_matches_all_types(item):
@@ -22,22 +22,22 @@ def test_item_answer_types_all_matches_all_types(item):
 
 
 def test_item_answer_types_correct_has_at_least_one_type(item):
-    assert len(item.atypes_correct) > 0
+    assert len(item.get_correct_answer_words()) > 0
 
 
 def test_item_answer_types_correct_are_all_super_effective(item):
-    effectiveness = pogoapi.type_effectiveness[item.qtype]
-    for t in item.atypes_correct:
+    effectiveness = pogoapi.type_effectiveness[item.get_data()]
+    for t in item.get_correct_answer_words():
         assert effectiveness[t] == pogoapi.SUPER_EFFECTIVE
 
 
 def test_item_question_is_well_formed(item):
-    assert item.qtype in item.question()
+    assert item.get_data() in item.ask_question()
 
 
 def test_item_correct_answer_contains_all_correct_types(item):
-    correct_answer = item.correct_answer()
-    for t in item.atypes_correct:
+    correct_answer = item.get_correct_answer()
+    for t in item.get_correct_answer_words():
         assert t in correct_answer
 
 
@@ -46,7 +46,7 @@ def test_item_empty_answer_is_not_correct(item):
 
 
 def test_item_answer_correct_with_correct_types(item):
-    assert item.is_answer_correct(' '.join(item.atypes_correct))
+    assert item.is_answer_correct(' '.join(item.get_correct_answer_words()))
 
 
 def test_item_answer_all_types_is_not_correct(item):

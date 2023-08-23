@@ -35,11 +35,11 @@ async def on_message(message):
         if item.is_answer_correct(message.content):
             await message.channel.send('That is correct!')
         else:
-            await message.channel.send(item.correct_answer())
+            await message.channel.send(item.get_correct_answer())
 
     # start new item
     item = super_effective_attacker.SuperEffectiveAttacker()
-    await message.channel.send(item.question())
+    await message.channel.send(item.ask_question())
 
 
 client.run(env.get('DISCORD_TOKEN'))
