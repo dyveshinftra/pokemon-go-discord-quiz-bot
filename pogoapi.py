@@ -5,6 +5,7 @@ import json
 
 
 type_effectiveness = json.load(open('type_effectiveness.json'))
+weather_boosts = json.load(open('weather_boosts.json'))
 
 # type effectiveness multiplier aliases
 SUPER_EFFECTIVE = 1.6

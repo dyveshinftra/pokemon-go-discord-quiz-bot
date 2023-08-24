@@ -90,3 +90,19 @@ class SuperEffectiveDefense(QuizItem):
 
     def get_all_possible_solutions(self):
         return pogoapi.type_effectiveness.keys()
+
+
+class WeatherBoost(QuizItem):
+
+    # build quiz_items
+    db = pogoapi.weather_boosts
+
+    def ask_question(self):
+        return f'What is boosted by {self._key} weather?'
+
+    def give_solution(self):
+        solution = ', '.join(self.get_solution())
+        return f'{self._key} boosts {solution}.'
+
+    def get_all_possible_solutions(self):
+        return pogoapi.type_effectiveness.keys()

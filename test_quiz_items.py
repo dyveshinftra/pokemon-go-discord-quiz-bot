@@ -41,3 +41,8 @@ def test_db_super_effective_attack():
 def test_db_super_effective_defense():
     item = quiz_items.SuperEffectiveDefense('Water')
     assert item.get_solution() == ['Electric', 'Grass']
+
+
+def test_db_weather_boost():
+    item = quiz_items.WeatherBoost('Clear')
+    assert item.get_solution() == ['Grass', 'Ground', 'Fire']
