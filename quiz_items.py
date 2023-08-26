@@ -92,6 +92,29 @@ class SuperEffectiveDefense(QuizItem):
         return pogoapi.type_effectiveness.keys()
 
 
+class SuperEffectiveDefenseDualType(QuizItem):
+
+    # build quiz items
+    db = {}
+    for attack_type, attack_type_data in pogoapi.type_effectiveness.items():
+        for defense_type1, effectiveness1 in attack_type_data.items():
+            for defense_type2, effectiveness2 in attack_type_data.items():
+                if defense_type1 == defense_type2:
+                    continue
+                if effectiveness1 * effectiveness2 >= pogoapi.SUPER_EFFECTIVE:
+                    db.setdefault(""+defense_type1+" "+defense_type2, []).append(attack_type)
+
+    def ask_question(self):
+        return f'What is super effective against {self._key}?'
+
+    def give_solution(self):
+        solution = ', '.join(self.get_solution())
+        return f'{solution} is super effective against {self._key}.'
+
+    def get_all_possible_solutions(self):
+        return pogoapi.type_effectiveness.keys()
+
+
 class WeatherBoost(QuizItem):
 
     # build quiz_items

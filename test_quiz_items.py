@@ -43,6 +43,16 @@ def test_db_super_effective_defense():
     assert item.get_solution() == ['Electric', 'Grass']
 
 
+def test_db_super_effective_defense_dual_type():
+    item = quiz_items.SuperEffectiveDefenseDualType('Water Ground')
+    assert item.get_solution() == ['Grass']
+
+
+def test_db_super_effective_defense_dual_type():
+    item = quiz_items.SuperEffectiveDefenseDualType('Fire Ground')
+    assert item.get_solution() == ['Ground', 'Water']
+
+
 def test_db_weather_boost():
     item = quiz_items.WeatherBoost('Clear')
     assert item.get_solution() == ['Grass', 'Ground', 'Fire']
