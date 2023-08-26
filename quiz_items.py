@@ -96,13 +96,15 @@ class SuperEffectiveDefenseDualType(QuizItem):
 
     # build quiz items
     db = {}
-    for attack_type, attack_type_data in pogoapi.type_effectiveness.items():
-        for defense_type1, effectiveness1 in attack_type_data.items():
-            for defense_type2, effectiveness2 in attack_type_data.items():
-                if defense_type1 == defense_type2:
+    for atype, attack_type_data in pogoapi.type_effectiveness.items():
+        for dtype1, effectiveness1 in attack_type_data.items():
+            for dtype2, effectiveness2 in attack_type_data.items():
+                if dtype1 == dtype2:
+                    continue
+                if f'{dtype2} and {dtype1}' in db:
                     continue
                 if effectiveness1 * effectiveness2 >= pogoapi.SUPER_EFFECTIVE:
-                    db.setdefault(""+defense_type1+" "+defense_type2, []).append(attack_type)
+                    db.setdefault(f'{dtype1} and {dtype2}', []).append(atype)
 
     def ask_question(self):
         return f'What is super effective against {self._key}?'
