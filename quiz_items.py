@@ -123,7 +123,7 @@ class NotVeryEffectiveAttack(QuizItem):
     db = {}
     for attack_type, attack_type_data in pogoapi.type_effectiveness.items():
         for defense_type, effectiveness in attack_type_data.items():
-            if effectiveness == pogoapi.NOT_VERY_EFFECTIVE:
+            if effectiveness <= pogoapi.NOT_VERY_EFFECTIVE:
                 db.setdefault(attack_type, []).append(defense_type)
 
     def ask_question(self):
@@ -143,7 +143,7 @@ class NotVeryEffectiveDefense(QuizItem):
     db = {}
     for attack_type, attack_type_data in pogoapi.type_effectiveness.items():
         for defense_type, effectiveness in attack_type_data.items():
-            if effectiveness == pogoapi.NOT_VERY_EFFECTIVE:
+            if effectiveness <= pogoapi.NOT_VERY_EFFECTIVE:
                 db.setdefault(defense_type, []).append(attack_type)
 
     def ask_question(self):
