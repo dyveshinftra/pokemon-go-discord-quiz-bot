@@ -53,6 +53,26 @@ def test_db_super_effective_defense_dual_type_fire_ground():
     assert item.get_solution() == ['Ground', 'Water']
 
 
+def test_db_not_very_ineffective_attack():
+    item = quiz_items.NotVeryEffectiveAttack('Water')
+    assert item.get_solution() == ['Dragon', 'Grass', 'Water']
+
+
+def test_db_not_very_effective_defense():
+    item = quiz_items.NotVeryEffectiveDefense('Water')
+    assert item.get_solution() == ['Fire', 'Ice', 'Steel', 'Water']
+
+
+def test_db_not_very_effective_defense_dual_type_ground_water():
+    item = quiz_items.NotVeryEffectiveDefenseDualType('Ground and Water')
+    assert item.get_solution() == ['Electric', 'Fire', 'Poison', 'Rock', 'Steel']
+
+
+def test_db_not_very_effective_defense_dual_type_fire_ground():
+    item = quiz_items.NotVeryEffectiveDefenseDualType('Fire and Ground')
+    assert item.get_solution() == ['Bug', 'Electric', 'Fairy', 'Fire', 'Poison', 'Steel']
+
+
 def test_db_weather_boost():
     item = quiz_items.WeatherBoost('Clear')
     assert item.get_solution() == ['Grass', 'Ground', 'Fire']
