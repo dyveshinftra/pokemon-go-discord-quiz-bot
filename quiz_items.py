@@ -28,19 +28,41 @@ class QuizItem(abc.ABC):
     def get_solution(self):
         return self.db[self._key]
 
-    def is_answer_correct(self, answer):
+    def give_answered_correct(self):
+        return 'That is correct!'
+
+    def give_answered_wrong_answers(self, wrong_answers):
+        if not wrong_answers:
+            return ''
+        solution = ', '.join(wrong_answers)
+        return f'You answered {solution} wrong\n'
+
+    def give_answered_forgotten_answers(self, forgotten_answers):
+        if not forgotten_answers:
+            return ''
+        solution = ', '.join(forgotten_answers)
+        return f'You forgot {solution}\n'
+
+    def answer(self, answer):
         # split answer in words, capitalize them, and remove duplicates
         words = set(map(lambda w: w.capitalize(), answer.split()))
 
         # filter out all possible solutions
         words = words.intersection(self.get_all_possible_solutions())
-
-        # filter out the solution
-        if len(words) == len(self.get_solution()):
-            words = words.intersection(self.get_solution())
+        forgotten_answers = set(self.get_solution())
+        forgotten_answers.difference_update(words)
+        wrong_answers = words
+        wrong_answers.difference_update(self.get_solution())
 
         # make sure to have the full solution
-        return len(words) == len(self.get_solution())
+        if not forgotten_answers and not wrong_answers:
+            return self.give_answered_correct()
+        else:
+            return (
+                self.give_answered_wrong_answers(wrong_answers)
+                + self.give_answered_forgotten_answers(forgotten_answers)
+                + self.give_solution()
+            )
 
     @abc.abstractmethod
     def ask_question(self): pass
@@ -162,13 +184,13 @@ class NotVeryEffectiveDefenseDualType(QuizItem):
     # build quiz items
     db = {}
     for atype, attack_type_data in pogoapi.type_effectiveness.items():
-        for dtype1, effectiveness1 in attack_type_data.items():
-            for dtype2, effectiveness2 in attack_type_data.items():
+        for dtype1, eff1 in attack_type_data.items():
+            for dtype2, eff2 in attack_type_data.items():
                 if dtype1 == dtype2:
                     continue
                 if f'{dtype2} and {dtype1}' in db:
                     continue
-                if effectiveness1 * effectiveness2 <= pogoapi.NOT_VERY_EFFECTIVE:
+                if eff1 * eff2 <= pogoapi.NOT_VERY_EFFECTIVE:
                     db.setdefault(f'{dtype1} and {dtype2}', []).append(atype)
 
     def ask_question(self):
