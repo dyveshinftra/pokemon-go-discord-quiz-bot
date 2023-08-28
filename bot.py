@@ -33,10 +33,7 @@ async def on_message(message):
 
     # check answer if quiz is ongoing
     if quiz_item:
-        if quiz_item.is_answer_correct(message.content):
-            await message.channel.send('That is correct!')
-        else:
-            await message.channel.send(quiz_item.give_solution())
+        message.channel.send(quiz_item.answer(message.content))
 
     # start new item
     quiz_item = random.choice(quiz_items.get_all_quiz_item_classes())()
