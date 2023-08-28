@@ -48,11 +48,22 @@ def test_db_super_effective_defense_dual_type_ground_water():
     assert item.get_solution() == ['Grass']
 
 
-def test_db_correct_quiz_response_on_wrong_answer():
+def test_db_correct_quiz_response_on_completely_wrong_answer():
     item = quiz_items.SuperEffectiveDefenseDualType('Ground and Water')
     assert item.answer('Poison') == (
-        'You answered Poison wrong\nYou forgot Grass\nGrass is super'
-        ' effective against Ground and Water.'
+        'Grass is super effective against Ground and Water.'
+    )
+
+
+def test_db_correct_quiz_response_on_forgotten_answer():
+    item = quiz_items.SuperEffectiveDefenseDualType('Ground and Water')
+    assert item.answer('') == 'You forgot Grass.'
+
+
+def test_db_correct_quiz_response_on_wrong_answer():
+    item = quiz_items.SuperEffectiveDefenseDualType('Ground and Water')
+    assert item.answer('Poison Grass') == (
+        'You answered Poison wrong.'
     )
 
 

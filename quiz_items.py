@@ -35,13 +35,13 @@ class QuizItem(abc.ABC):
         if not wrong_answers:
             return ''
         solution = ', '.join(wrong_answers)
-        return f'You answered {solution} wrong\n'
+        return f'You answered {solution} wrong.'
 
     def give_answered_forgotten_answers(self, forgotten_answers):
         if not forgotten_answers:
             return ''
         solution = ', '.join(forgotten_answers)
-        return f'You forgot {solution}\n'
+        return f'You forgot {solution}.'
 
     def answer(self, answer):
         # split answer in words, capitalize them, and remove duplicates
@@ -57,12 +57,12 @@ class QuizItem(abc.ABC):
         # make sure to have the full solution
         if not forgotten_answers and not wrong_answers:
             return self.give_answered_correct()
+        elif not forgotten_answers:
+            return self.give_answered_wrong_answers(wrong_answers)
+        elif not wrong_answers:
+            return self.give_answered_forgotten_answers(forgotten_answers)
         else:
-            return (
-                self.give_answered_wrong_answers(wrong_answers)
-                + self.give_answered_forgotten_answers(forgotten_answers)
-                + self.give_solution()
-            )
+            return self.give_solution()
 
     @abc.abstractmethod
     def ask_question(self): pass
