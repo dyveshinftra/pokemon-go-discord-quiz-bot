@@ -4,28 +4,34 @@ import quiz_items
 import random
 
 
+from discord.ext import commands
+
+
 intents = discord.Intents.default()
 intents.message_content = True
 
 
-client = discord.Client(intents=intents, proxy=env.get('https_proxy'))
+bot = commands.Bot(
+        command_prefix='?',
+        intents=intents,
+        proxy=env.get('https_proxy'))
 
 
 # current quiz item
 quiz_item = None
 
 
-@client.event
+@bot.event
 async def on_ready():
-    print(f'{client.user} has connected to Discord!')
+    print(f'{bot.user} has connected to Discord!')
 
 
-@client.event
+@bot.event
 async def on_message(message):
     global quiz_item
 
     # ignore when it's from us
-    if message.author == client.user:
+    if message.author == bot.user:
         return
     # only watch the quiz channel
     if message.channel.name != 'quiz':
@@ -40,4 +46,4 @@ async def on_message(message):
     await message.channel.send(quiz_item.ask_question())
 
 
-client.run(env.get('DISCORD_TOKEN'))
+bot.run(env.get('DISCORD_TOKEN'))
