@@ -58,7 +58,11 @@ class QuizItem(abc.ABC):
         if not forgotten_answers and not wrong_answers:
             return self.give_answered_correct()
         else:
-            return self.give_answered_wrong_answers(wrong_answers) + self.give_answered_forgotten_answers(forgotten_answers) + self.give_solution()
+            return (
+                self.give_answered_wrong_answers(wrong_answers)
+                + self.give_answered_forgotten_answers(forgotten_answers)
+                + self.give_solution()
+            )
 
     @abc.abstractmethod
     def ask_question(self): pass
@@ -180,13 +184,13 @@ class NotVeryEffectiveDefenseDualType(QuizItem):
     # build quiz items
     db = {}
     for atype, attack_type_data in pogoapi.type_effectiveness.items():
-        for dtype1, effectiveness1 in attack_type_data.items():
-            for dtype2, effectiveness2 in attack_type_data.items():
+        for dtype1, eff1 in attack_type_data.items():
+            for dtype2, eff2 in attack_type_data.items():
                 if dtype1 == dtype2:
                     continue
                 if f'{dtype2} and {dtype1}' in db:
                     continue
-                if effectiveness1 * effectiveness2 <= pogoapi.NOT_VERY_EFFECTIVE:
+                if eff1 * eff2 <= pogoapi.NOT_VERY_EFFECTIVE:
                     db.setdefault(f'{dtype1} and {dtype2}', []).append(atype)
 
     def ask_question(self):
