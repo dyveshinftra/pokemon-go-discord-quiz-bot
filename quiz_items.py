@@ -57,12 +57,16 @@ class QuizItem(abc.ABC):
         # make sure to have the full solution
         if not forgotten_answers and not wrong_answers:
             return self.give_answered_correct()
+        elif (
+            (forgotten_answers and wrong_answers)
+            or len(forgotten_answers) == len(self.get_solution())
+            or len(forgotten_answers) >= 3
+        ):
+            return self.give_solution()
         elif not forgotten_answers:
             return self.give_answered_wrong_answers(wrong_answers)
         elif not wrong_answers:
             return self.give_answered_forgotten_answers(forgotten_answers)
-        else:
-            return self.give_solution()
 
     @abc.abstractmethod
     def ask_question(self): pass

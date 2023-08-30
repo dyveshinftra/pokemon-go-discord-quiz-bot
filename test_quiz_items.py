@@ -55,9 +55,16 @@ def test_db_correct_quiz_response_on_completely_wrong_answer():
     )
 
 
-def test_db_correct_quiz_response_on_forgotten_answer():
+def test_db_correct_quiz_response_on_empty_answer():
     item = quiz_items.SuperEffectiveDefenseDualType('Ground and Water')
-    assert item.answer('') == 'You forgot Grass.'
+    assert item.answer('') == (
+        'Grass is super effective against Ground and Water.'
+    )
+
+
+def test_db_correct_quiz_response_on_forgotten_answer():
+    item = quiz_items.SuperEffectiveDefense('Water')
+    assert item.answer('Electric') == 'You forgot Grass.'
 
 
 def test_db_correct_quiz_response_on_wrong_answer():
