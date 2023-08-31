@@ -82,10 +82,10 @@ class SuperEffectiveAttack(QuizItem):
 
     # build quiz items
     db = {}
-    for attack_type, attack_type_data in pogoapi.type_effectiveness.items():
-        for defense_type, effectiveness in attack_type_data.items():
+    for atype, atype_data in pogoapi.get_type_effectiveness().items():
+        for dtype, effectiveness in atype_data.items():
             if effectiveness == pogoapi.SUPER_EFFECTIVE:
-                db.setdefault(attack_type, []).append(defense_type)
+                db.setdefault(atype, []).append(dtype)
 
     def ask_question(self):
         return f'What is {self._key} super effective against?'
@@ -95,17 +95,17 @@ class SuperEffectiveAttack(QuizItem):
         return f'{self._key} is super effective against {solution}.'
 
     def get_all_possible_solutions(self):
-        return pogoapi.type_effectiveness.keys()
+        return pogoapi.get_type_effectiveness().keys()
 
 
 class SuperEffectiveDefense(QuizItem):
 
     # build quiz items
     db = {}
-    for attack_type, attack_type_data in pogoapi.type_effectiveness.items():
-        for defense_type, effectiveness in attack_type_data.items():
+    for atype, atype_data in pogoapi.get_type_effectiveness().items():
+        for dtype, effectiveness in atype_data.items():
             if effectiveness == pogoapi.SUPER_EFFECTIVE:
-                db.setdefault(defense_type, []).append(attack_type)
+                db.setdefault(dtype, []).append(atype)
 
     def ask_question(self):
         return f'What is super effective against {self._key}?'
@@ -115,16 +115,16 @@ class SuperEffectiveDefense(QuizItem):
         return f'{solution} is super effective against {self._key}.'
 
     def get_all_possible_solutions(self):
-        return pogoapi.type_effectiveness.keys()
+        return pogoapi.get_type_effectiveness().keys()
 
 
 class SuperEffectiveDefenseDualType(QuizItem):
 
     # build quiz items
     db = {}
-    for atype, attack_type_data in pogoapi.type_effectiveness.items():
-        for dtype1, effectiveness1 in attack_type_data.items():
-            for dtype2, effectiveness2 in attack_type_data.items():
+    for atype, atype_data in pogoapi.get_type_effectiveness().items():
+        for dtype1, effectiveness1 in atype_data.items():
+            for dtype2, effectiveness2 in atype_data.items():
                 if dtype1 == dtype2:
                     continue
                 if f'{dtype2} and {dtype1}' in db:
@@ -140,17 +140,17 @@ class SuperEffectiveDefenseDualType(QuizItem):
         return f'{solution} is super effective against {self._key}.'
 
     def get_all_possible_solutions(self):
-        return pogoapi.type_effectiveness.keys()
+        return pogoapi.get_type_effectiveness().keys()
 
 
 class NotVeryEffectiveAttack(QuizItem):
 
     # build quiz items
     db = {}
-    for attack_type, attack_type_data in pogoapi.type_effectiveness.items():
-        for defense_type, effectiveness in attack_type_data.items():
+    for atype, atype_data in pogoapi.get_type_effectiveness().items():
+        for dtype, effectiveness in atype_data.items():
             if effectiveness <= pogoapi.NOT_VERY_EFFECTIVE:
-                db.setdefault(attack_type, []).append(defense_type)
+                db.setdefault(atype, []).append(dtype)
 
     def ask_question(self):
         return f'What is {self._key} not very effective against?'
@@ -160,17 +160,17 @@ class NotVeryEffectiveAttack(QuizItem):
         return f'{self._key} is not very effective against {solution}.'
 
     def get_all_possible_solutions(self):
-        return pogoapi.type_effectiveness.keys()
+        return pogoapi.get_type_effectiveness().keys()
 
 
 class NotVeryEffectiveDefense(QuizItem):
 
     # build quiz items
     db = {}
-    for attack_type, attack_type_data in pogoapi.type_effectiveness.items():
-        for defense_type, effectiveness in attack_type_data.items():
+    for atype, atype_data in pogoapi.get_type_effectiveness().items():
+        for dtype, effectiveness in atype_data.items():
             if effectiveness <= pogoapi.NOT_VERY_EFFECTIVE:
-                db.setdefault(defense_type, []).append(attack_type)
+                db.setdefault(dtype, []).append(atype)
 
     def ask_question(self):
         return f'What is not very effective against {self._key}?'
@@ -180,16 +180,16 @@ class NotVeryEffectiveDefense(QuizItem):
         return f'{solution} is not very effective against {self._key}.'
 
     def get_all_possible_solutions(self):
-        return pogoapi.type_effectiveness.keys()
+        return pogoapi.get_type_effectiveness().keys()
 
 
 class NotVeryEffectiveDefenseDualType(QuizItem):
 
     # build quiz items
     db = {}
-    for atype, attack_type_data in pogoapi.type_effectiveness.items():
-        for dtype1, eff1 in attack_type_data.items():
-            for dtype2, eff2 in attack_type_data.items():
+    for atype, atype_data in pogoapi.get_type_effectiveness().items():
+        for dtype1, eff1 in atype_data.items():
+            for dtype2, eff2 in atype_data.items():
                 if dtype1 == dtype2:
                     continue
                 if f'{dtype2} and {dtype1}' in db:
@@ -205,7 +205,7 @@ class NotVeryEffectiveDefenseDualType(QuizItem):
         return f'{solution} is not very effective against {self._key}.'
 
     def get_all_possible_solutions(self):
-        return pogoapi.type_effectiveness.keys()
+        return pogoapi.get_type_effectiveness().keys()
 
 
 class WeatherBoost(QuizItem):
@@ -221,4 +221,4 @@ class WeatherBoost(QuizItem):
         return f'{self._key} boosts {solution}.'
 
     def get_all_possible_solutions(self):
-        return pogoapi.type_effectiveness.keys()
+        return pogoapi.get_type_effectiveness().keys()

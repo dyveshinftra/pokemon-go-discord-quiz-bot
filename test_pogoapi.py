@@ -6,12 +6,12 @@ import pytest
 
 
 def test_number_of_types():
-    assert len(pogoapi.type_effectiveness.keys()) == 18
+    assert len(pogoapi.get_type_effectiveness().keys()) == 18
 
 
 @pytest.fixture
 def fighting():
-    return pogoapi.type_effectiveness['Fighting']
+    return pogoapi.get_type_effectiveness()['Fighting']
 
 
 def test_fighting_is_super_effective_against_normal(fighting):
