@@ -2,9 +2,13 @@ import discord
 import env
 import quiz_items
 import random
+import sys
 
 
 from discord.ext import commands
+
+
+command_prefix = '$'
 
 
 intents = discord.Intents.default()
@@ -12,7 +16,7 @@ intents.message_content = True
 
 
 bot = commands.Bot(
-        command_prefix='?',
+        command_prefix=command_prefix,
         intents=intents,
         proxy=env.get('https_proxy'))
 
@@ -33,6 +37,12 @@ async def on_message(message):
     # ignore when it's from us
     if message.author == bot.user:
         return
+
+    # handle commands
+    if message.content.startswith(command_prefix):
+        await bot.process_commands(message)
+        return
+
     # only watch the quiz channel
     if message.channel.name != 'quiz':
         return
@@ -44,6 +54,12 @@ async def on_message(message):
     # start new item
     quiz_item = random.choice(quiz_items.get_all_quiz_item_classes())()
     await message.channel.send(quiz_item.ask_question())
+
+
+@bot.command()
+async def exit(ctx):
+    await ctx.send('Goodbye.')
+    sys.exit()
 
 
 bot.run(env.get('DISCORD_TOKEN'))
