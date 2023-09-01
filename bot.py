@@ -1,8 +1,12 @@
 import discord
 import env
+import pogoapi
 import quiz_items
 import random
 import sys
+
+
+from type import Type
 
 
 from discord.ext import commands
@@ -60,6 +64,22 @@ async def on_message(message):
 async def exit(ctx):
     await ctx.send('Goodbye.')
     sys.exit()
+
+
+@bot.command()
+async def type(ctx, arg):
+    arg = arg.capitalize()
+
+    if arg not in pogoapi.get_type_effectiveness().keys():
+        await ctx.send(f'I don\'t know {arg}')
+        return
+
+    type = Type(arg)
+    for effect in ('super effective', 'not very effective', 'ineffective'):
+        types = getattr(type, effect.replace(' ', '_'))()
+        if types:
+            types = ', '.join(map(str, types))
+            await ctx.send(f'{arg} is {effect} against {types}')
 
 
 bot.run(env.get('DISCORD_TOKEN'))
