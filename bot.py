@@ -12,7 +12,7 @@ from type import Type
 from discord.ext import commands
 
 
-command_prefix = '$'
+command_prefix = '/'
 
 
 intents = discord.Intents.default()
