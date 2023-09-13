@@ -1,18 +1,14 @@
-import discord
-import env
-import pogoapi
-import quiz_items
-import random
 import sys
 
-
-from type import Type
-
-
+import discord
 from discord.ext import commands
 
+import env
+import pogoapi
+from quiz import Quiz
+from type import Type
 
-command_prefix = '/'
+command_prefix = "/"
 
 
 intents = discord.Intents.default()
@@ -20,23 +16,22 @@ intents.message_content = True
 
 
 bot = commands.Bot(
-        command_prefix=command_prefix,
-        intents=intents,
-        proxy=env.get('https_proxy'))
+    command_prefix=command_prefix, intents=intents, proxy=env.get("https_proxy")
+)
 
 
-# current quiz item
-quiz_item = None
+# current quiz
+quiz = None
 
 
 @bot.event
 async def on_ready():
-    print(f'{bot.user} has connected to Discord!')
+    print(f"{bot.user} has connected to Discord!")
 
 
 @bot.event
 async def on_message(message):
-    global quiz_item
+    global quiz
 
     # ignore when it's from us
     if message.author == bot.user:
@@ -48,22 +43,40 @@ async def on_message(message):
         return
 
     # only watch the quiz channel
-    if message.channel.name != 'quiz':
+    if message.channel.name != "quiz":
         return
 
     # check answer if quiz is ongoing
-    if quiz_item:
-        await message.channel.send(quiz_item.answer(message.content))
-
-    # start new item
-    quiz_item = random.choice(quiz_items.get_all_quiz_item_classes())()
-    await message.channel.send(quiz_item.ask_question())
+    if quiz:
+        await message.channel.send(quiz.answer(message.content))
+        if quiz.has_remaining_questions():
+            await message.channel.send(quiz.ask_question())
+        else:
+            await message.channel.send(quiz.show_score())
+            quiz = None
+    else:
+        await message.channel.send(
+            "No quiz in progress, start a new quiz by using /start"
+        )
 
 
 @bot.command()
 async def exit(ctx):
-    await ctx.send('Goodbye.')
+    await ctx.send("Goodbye.")
     sys.exit()
+
+
+@bot.command()
+async def start(ctx, arg=5):
+    global quiz
+    try:
+        int(arg)
+    except:
+        await ctx.send("first argument (number of questions should be an int)")
+    else:
+        await ctx.send("Starting quiz.")
+        quiz = Quiz(arg)
+        await ctx.send(quiz.ask_question())
 
 
 @bot.command()
@@ -71,15 +84,15 @@ async def type(ctx, arg):
     arg = arg.capitalize()
 
     if arg not in pogoapi.get_type_effectiveness().keys():
-        await ctx.send(f'I don\'t know {arg}')
+        await ctx.send(f"I don't know {arg}")
         return
 
     type = Type(arg)
-    for effect in ('super effective', 'not very effective', 'ineffective'):
-        types = getattr(type, effect.replace(' ', '_'))()
+    for effect in ("super effective", "not very effective", "ineffective"):
+        types = getattr(type, effect.replace(" ", "_"))()
         if types:
-            types = ', '.join(map(str, types))
-            await ctx.send(f'{arg} is {effect} against {types}')
+            types = ", ".join(map(str, types))
+            await ctx.send(f"{arg} is {effect} against {types}")
 
 
-bot.run(env.get('DISCORD_TOKEN'))
+bot.run(env.get("DISCORD_TOKEN"))

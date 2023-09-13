@@ -2,8 +2,9 @@
 
 
 import abc
-import pogoapi
 import random
+
+import pogoapi
 
 
 def get_all_quiz_item_classes():
@@ -11,7 +12,6 @@ def get_all_quiz_item_classes():
 
 
 class QuizItem(abc.ABC):
-
     # all quiz items for this class
     #   - key   the actual question (string)
     #   - value the correct answer  (list of words)
@@ -29,19 +29,19 @@ class QuizItem(abc.ABC):
         return self.db[self._key]
 
     def give_answered_correct(self):
-        return 'That is correct!'
+        return "That is correct!"
 
     def give_answered_wrong_answers(self, wrong_answers):
         if not wrong_answers:
-            return ''
-        solution = ', '.join(wrong_answers)
-        return f'You answered {solution} wrong.'
+            return ""
+        solution = ", ".join(wrong_answers)
+        return f"You answered {solution} wrong."
 
     def give_answered_forgotten_answers(self, forgotten_answers):
         if not forgotten_answers:
-            return ''
-        solution = ', '.join(forgotten_answers)
-        return f'You forgot {solution}.'
+            return ""
+        solution = ", ".join(forgotten_answers)
+        return f"You forgot {solution}."
 
     def answer(self, answer):
         # split answer in words, capitalize them, and remove duplicates
@@ -56,30 +56,32 @@ class QuizItem(abc.ABC):
 
         # make sure to have the full solution
         if not forgotten_answers and not wrong_answers:
-            return self.give_answered_correct()
+            return (True, self.give_answered_correct())
         elif (
             (forgotten_answers and wrong_answers)
             or len(forgotten_answers) == len(self.get_solution())
             or len(forgotten_answers) >= 3
         ):
-            return self.give_solution()
+            return (False, self.give_solution())
         elif not forgotten_answers:
-            return self.give_answered_wrong_answers(wrong_answers)
+            return (False, self.give_answered_wrong_answers(wrong_answers))
         elif not wrong_answers:
-            return self.give_answered_forgotten_answers(forgotten_answers)
+            return (False, self.give_answered_forgotten_answers(forgotten_answers))
 
     @abc.abstractmethod
-    def ask_question(self): pass
+    def ask_question(self):
+        pass
 
     @abc.abstractmethod
-    def give_solution(self): pass
+    def give_solution(self):
+        pass
 
     @abc.abstractmethod
-    def get_all_possible_solutions(self): pass
+    def get_all_possible_solutions(self):
+        pass
 
 
 class SuperEffectiveAttack(QuizItem):
-
     # build quiz items
     db = {}
     for atype, atype_data in pogoapi.get_type_effectiveness().items():
@@ -88,18 +90,17 @@ class SuperEffectiveAttack(QuizItem):
                 db.setdefault(atype, []).append(dtype)
 
     def ask_question(self):
-        return f'What is {self._key} super effective against?'
+        return f"What is {self._key} super effective against?"
 
     def give_solution(self):
-        solution = ', '.join(self.get_solution())
-        return f'{self._key} is super effective against {solution}.'
+        solution = ", ".join(self.get_solution())
+        return f"{self._key} is super effective against {solution}."
 
     def get_all_possible_solutions(self):
         return pogoapi.get_type_effectiveness().keys()
 
 
 class SuperEffectiveDefense(QuizItem):
-
     # build quiz items
     db = {}
     for atype, atype_data in pogoapi.get_type_effectiveness().items():
@@ -108,18 +109,17 @@ class SuperEffectiveDefense(QuizItem):
                 db.setdefault(dtype, []).append(atype)
 
     def ask_question(self):
-        return f'What is super effective against {self._key}?'
+        return f"What is super effective against {self._key}?"
 
     def give_solution(self):
-        solution = ', '.join(self.get_solution())
-        return f'{solution} is super effective against {self._key}.'
+        solution = ", ".join(self.get_solution())
+        return f"{solution} is super effective against {self._key}."
 
     def get_all_possible_solutions(self):
         return pogoapi.get_type_effectiveness().keys()
 
 
 class SuperEffectiveDefenseDualType(QuizItem):
-
     # build quiz items
     db = {}
     for atype, atype_data in pogoapi.get_type_effectiveness().items():
@@ -127,24 +127,23 @@ class SuperEffectiveDefenseDualType(QuizItem):
             for dtype2, effectiveness2 in atype_data.items():
                 if dtype1 == dtype2:
                     continue
-                if f'{dtype2} and {dtype1}' in db:
+                if f"{dtype2} and {dtype1}" in db:
                     continue
                 if effectiveness1 * effectiveness2 >= pogoapi.SUPER_EFFECTIVE:
-                    db.setdefault(f'{dtype1} and {dtype2}', []).append(atype)
+                    db.setdefault(f"{dtype1} and {dtype2}", []).append(atype)
 
     def ask_question(self):
-        return f'What is super effective against {self._key}?'
+        return f"What is super effective against {self._key}?"
 
     def give_solution(self):
-        solution = ', '.join(self.get_solution())
-        return f'{solution} is super effective against {self._key}.'
+        solution = ", ".join(self.get_solution())
+        return f"{solution} is super effective against {self._key}."
 
     def get_all_possible_solutions(self):
         return pogoapi.get_type_effectiveness().keys()
 
 
 class NotVeryEffectiveAttack(QuizItem):
-
     # build quiz items
     db = {}
     for atype, atype_data in pogoapi.get_type_effectiveness().items():
@@ -153,18 +152,17 @@ class NotVeryEffectiveAttack(QuizItem):
                 db.setdefault(atype, []).append(dtype)
 
     def ask_question(self):
-        return f'What is {self._key} not very effective against?'
+        return f"What is {self._key} not very effective against?"
 
     def give_solution(self):
-        solution = ', '.join(self.get_solution())
-        return f'{self._key} is not very effective against {solution}.'
+        solution = ", ".join(self.get_solution())
+        return f"{self._key} is not very effective against {solution}."
 
     def get_all_possible_solutions(self):
         return pogoapi.get_type_effectiveness().keys()
 
 
 class NotVeryEffectiveDefense(QuizItem):
-
     # build quiz items
     db = {}
     for atype, atype_data in pogoapi.get_type_effectiveness().items():
@@ -173,18 +171,17 @@ class NotVeryEffectiveDefense(QuizItem):
                 db.setdefault(dtype, []).append(atype)
 
     def ask_question(self):
-        return f'What is not very effective against {self._key}?'
+        return f"What is not very effective against {self._key}?"
 
     def give_solution(self):
-        solution = ', '.join(self.get_solution())
-        return f'{solution} is not very effective against {self._key}.'
+        solution = ", ".join(self.get_solution())
+        return f"{solution} is not very effective against {self._key}."
 
     def get_all_possible_solutions(self):
         return pogoapi.get_type_effectiveness().keys()
 
 
 class NotVeryEffectiveDefenseDualType(QuizItem):
-
     # build quiz items
     db = {}
     for atype, atype_data in pogoapi.get_type_effectiveness().items():
@@ -192,33 +189,32 @@ class NotVeryEffectiveDefenseDualType(QuizItem):
             for dtype2, eff2 in atype_data.items():
                 if dtype1 == dtype2:
                     continue
-                if f'{dtype2} and {dtype1}' in db:
+                if f"{dtype2} and {dtype1}" in db:
                     continue
                 if eff1 * eff2 <= pogoapi.NOT_VERY_EFFECTIVE:
-                    db.setdefault(f'{dtype1} and {dtype2}', []).append(atype)
+                    db.setdefault(f"{dtype1} and {dtype2}", []).append(atype)
 
     def ask_question(self):
-        return f'What is not very effective against {self._key}?'
+        return f"What is not very effective against {self._key}?"
 
     def give_solution(self):
-        solution = ', '.join(self.get_solution())
-        return f'{solution} is not very effective against {self._key}.'
+        solution = ", ".join(self.get_solution())
+        return f"{solution} is not very effective against {self._key}."
 
     def get_all_possible_solutions(self):
         return pogoapi.get_type_effectiveness().keys()
 
 
 class WeatherBoost(QuizItem):
-
     # build quiz_items
     db = pogoapi.weather_boosts
 
     def ask_question(self):
-        return f'What is boosted by {self._key} weather?'
+        return f"What is boosted by {self._key} weather?"
 
     def give_solution(self):
-        solution = ', '.join(self.get_solution())
-        return f'{self._key} boosts {solution}.'
+        solution = ", ".join(self.get_solution())
+        return f"{self._key} boosts {solution}."
 
     def get_all_possible_solutions(self):
         return pogoapi.get_type_effectiveness().keys()
