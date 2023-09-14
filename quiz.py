@@ -8,20 +8,37 @@ import quiz_items
 
 
 class Quiz(abc.ABC):
-    def __init__(self, remaining_questions):
-        self.remaining_questions = int(remaining_questions)
-        self.questions = int(remaining_questions)
+    def __init__(
+        self,
+        questions,
+        super_eff: bool = True,
+        not_very_eff: bool = True,
+        dual: bool = True,
+        weather: bool = True,
+    ):
+        self.remaining_questions = []
+        for _ in range(questions):
+            self.remaining_questions.append(
+                random.choice(
+                    quiz_items.get_quiz_item_classes(
+                        super_eff=super_eff,
+                        not_very_eff=not_very_eff,
+                        dual=dual,
+                        weather=weather,
+                    )
+                )()
+            )
+        self.questions = int(questions)
         self.score = 0
 
     def has_remaining_questions(self):
-        return self.remaining_questions > 0
+        return bool(self.remaining_questions)
 
     def ask_question(self):
-        self.quiz_item = random.choice(quiz_items.get_all_quiz_item_classes())()
+        self.quiz_item = self.remaining_questions.pop()
         return self.quiz_item.ask_question()
 
     def answer(self, content):
-        self.remaining_questions -= 1
         is_correct, s = self.quiz_item.answer(content)
         if is_correct:
             self.score += 1

@@ -11,6 +11,29 @@ def get_all_quiz_item_classes():
     return QuizItem.__subclasses__()
 
 
+def get_quiz_item_classes(
+    super_eff: bool = True,
+    not_very_eff: bool = True,
+    dual: bool = True,
+    weather: bool = True,
+):
+    classes = []
+    if super_eff:
+        classes.append(SuperEffectiveAttack)
+        classes.append(SuperEffectiveDefense)
+        if dual:
+            classes.append(SuperEffectiveDefenseDualType)
+    if not_very_eff:
+        classes.append(NotVeryEffectiveAttack)
+        classes.append(NotVeryEffectiveDefense)
+        if dual:
+            classes.append(NotVeryEffectiveDefenseDualType)
+    if weather:
+        classes.append(WeatherBoost)
+
+    return classes
+
+
 class QuizItem(abc.ABC):
     # all quiz items for this class
     #   - key   the actual question (string)

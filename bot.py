@@ -67,16 +67,26 @@ async def exit(ctx):
 
 
 @bot.command()
-async def start(ctx, arg=5):
+async def start(
+    ctx,
+    questions: int = 5,
+    super_eff: int = 1,
+    not_very_eff: int = 1,
+    dual: int = 1,
+    weather: int = 1,
+):
     global quiz
-    try:
-        int(arg)
-    except:
-        await ctx.send("first argument (number of questions should be an int)")
-    else:
-        await ctx.send("Starting quiz.")
-        quiz = Quiz(arg)
-        await ctx.send(quiz.ask_question())
+    await ctx.send(
+        f"Starting quiz. {questions=} {super_eff=} {not_very_eff=} {dual=} {weather=}"
+    )
+    quiz = Quiz(
+        questions=questions,
+        super_eff=bool(super_eff),
+        not_very_eff=bool(not_very_eff),
+        dual=bool(dual),
+        weather=bool(weather),
+    )
+    await ctx.send(quiz.ask_question())
 
 
 @bot.command()
