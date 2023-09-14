@@ -1,4 +1,5 @@
 import pytest
+
 import quiz_items
 
 
@@ -21,88 +22,91 @@ def test_item_give_solution_is_well_formed(item):
 
 
 def test_item_empty_answer_is_not_correct(item):
-    assert item.answer('') != 'That is correct!'
+    assert item.answer("") != (True, "That is correct!")
 
 
 def test_item_solution_is_correct(item):
-    assert item.answer(' '.join(item.get_solution())) == 'That is correct!'
+    assert item.answer(" ".join(item.get_solution())) == (True, "That is correct!")
 
 
 def test_item_but_all_possible_solution_is_not_correct(item):
-    answer = ' '.join(item.get_all_possible_solutions())
-    assert item.answer(answer) != 'That is correct!'
+    answer = " ".join(item.get_all_possible_solutions())
+    assert item.answer(answer) != (True, "That is correct!")
 
 
 def test_db_super_effective_attack():
-    item = quiz_items.SuperEffectiveAttack('Water')
-    assert item.get_solution() == ['Fire', 'Ground', 'Rock']
+    item = quiz_items.SuperEffectiveAttack("Water")
+    assert item.get_solution() == ["Fire", "Ground", "Rock"]
 
 
 def test_db_super_effective_defense():
-    item = quiz_items.SuperEffectiveDefense('Water')
-    assert item.get_solution() == ['Electric', 'Grass']
+    item = quiz_items.SuperEffectiveDefense("Water")
+    assert item.get_solution() == ["Electric", "Grass"]
 
 
 def test_db_super_effective_defense_dual_type_ground_water():
-    item = quiz_items.SuperEffectiveDefenseDualType('Ground and Water')
-    assert item.get_solution() == ['Grass']
+    item = quiz_items.SuperEffectiveDefenseDualType("Ground and Water")
+    assert item.get_solution() == ["Grass"]
 
 
 def test_db_correct_quiz_response_on_completely_wrong_answer():
-    item = quiz_items.SuperEffectiveDefenseDualType('Ground and Water')
-    assert item.answer('Poison') == (
-        'Grass is super effective against Ground and Water.'
+    item = quiz_items.SuperEffectiveDefenseDualType("Ground and Water")
+    assert item.answer("Poison") == (
+        False,
+        "Grass is super effective against Ground and Water.",
     )
 
 
 def test_db_correct_quiz_response_on_empty_answer():
-    item = quiz_items.SuperEffectiveDefenseDualType('Ground and Water')
-    assert item.answer('') == (
-        'Grass is super effective against Ground and Water.'
+    item = quiz_items.SuperEffectiveDefenseDualType("Ground and Water")
+    assert item.answer("") == (
+        False,
+        "Grass is super effective against Ground and Water.",
     )
 
 
 def test_db_correct_quiz_response_on_forgotten_answer():
-    item = quiz_items.SuperEffectiveDefense('Water')
-    assert item.answer('Electric') == 'You forgot Grass.'
+    item = quiz_items.SuperEffectiveDefense("Water")
+    assert item.answer("Electric") == (False, "You forgot Grass.")
 
 
 def test_db_correct_quiz_response_on_wrong_answer():
-    item = quiz_items.SuperEffectiveDefenseDualType('Ground and Water')
-    assert item.answer('Poison Grass') == (
-        'You answered Poison wrong.'
-    )
+    item = quiz_items.SuperEffectiveDefenseDualType("Ground and Water")
+    assert item.answer("Poison Grass") == (False, "You answered Poison wrong.")
 
 
 def test_db_super_effective_defense_dual_type_fire_ground():
-    item = quiz_items.SuperEffectiveDefenseDualType('Fire and Ground')
-    assert item.get_solution() == ['Ground', 'Water']
+    item = quiz_items.SuperEffectiveDefenseDualType("Fire and Ground")
+    assert item.get_solution() == ["Ground", "Water"]
 
 
 def test_db_not_very_ineffective_attack():
-    item = quiz_items.NotVeryEffectiveAttack('Water')
-    assert item.get_solution() == ['Dragon', 'Grass', 'Water']
+    item = quiz_items.NotVeryEffectiveAttack("Water")
+    assert item.get_solution() == ["Dragon", "Grass", "Water"]
 
 
 def test_db_not_very_effective_defense():
-    item = quiz_items.NotVeryEffectiveDefense('Water')
-    assert item.get_solution() == ['Fire', 'Ice', 'Steel', 'Water']
+    item = quiz_items.NotVeryEffectiveDefense("Water")
+    assert item.get_solution() == ["Fire", "Ice", "Steel", "Water"]
 
 
 def test_db_not_very_effective_defense_dual_type_ground_water():
-    item = quiz_items.NotVeryEffectiveDefenseDualType('Ground and Water')
-    assert item.get_solution() == [
-        'Electric', 'Fire', 'Poison', 'Rock', 'Steel'
-    ]
+    item = quiz_items.NotVeryEffectiveDefenseDualType("Ground and Water")
+    assert item.get_solution() == ["Electric", "Fire", "Poison", "Rock", "Steel"]
 
 
 def test_db_not_very_effective_defense_dual_type_fire_ground():
-    item = quiz_items.NotVeryEffectiveDefenseDualType('Fire and Ground')
+    item = quiz_items.NotVeryEffectiveDefenseDualType("Fire and Ground")
     assert item.get_solution() == [
-        'Bug', 'Electric', 'Fairy', 'Fire', 'Poison', 'Steel'
+        "Bug",
+        "Electric",
+        "Fairy",
+        "Fire",
+        "Poison",
+        "Steel",
     ]
 
 
 def test_db_weather_boost():
-    item = quiz_items.WeatherBoost('Clear')
-    assert item.get_solution() == ['Grass', 'Ground', 'Fire']
+    item = quiz_items.WeatherBoost("Clear")
+    assert item.get_solution() == ["Grass", "Ground", "Fire"]
