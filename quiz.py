@@ -39,10 +39,10 @@ class Quiz(abc.ABC):
         return self.quiz_item.ask_question()
 
     def answer(self, content):
-        is_correct, s = self.quiz_item.answer(content)
-        if is_correct:
+        result = self.quiz_item.verify_answer(content)
+        if result.is_correct():
             self.score += 1
-        return s
+        return result.get_reply()
 
     def show_score(self):
         return f"You scored {self.score} out of {self.questions}"

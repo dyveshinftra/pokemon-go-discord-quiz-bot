@@ -3,9 +3,6 @@ import pytest
 import quiz_items
 
 
-correct_answer = (True, "That is correct!")
-
-
 @pytest.fixture(params=quiz_items.get_all_quiz_item_classes())
 def item(request):
     return request.param()
@@ -20,21 +17,23 @@ def test_item_question_is_well_formed(item):
 
 
 def test_item_give_solution_is_well_formed(item):
+    result = item.verify_answer('foo')
+    reply = result.get_reply()
     for solution in item.get_solution():
-        assert solution in item.give_solution()
+        assert solution in reply
 
 
-def test_item_empty_answer_is_not_correct(item):
-    assert item.answer("") != correct_answer
+def test_empty_answer_is_not_correct(item):
+    assert not item.verify_answer("").is_correct()
 
 
-def test_item_solution_is_correct(item):
-    assert item.answer(" ".join(item.get_solution())) == correct_answer
+def test_solution_is_correct(item):
+    assert item.verify_answer(" ".join(item.get_solution())).is_correct()
 
 
-def test_item_but_all_possible_solution_is_not_correct(item):
+def test_but_all_possible_solution_is_not_correct(item):
     answer = " ".join(item.get_all_possible_solutions())
-    assert item.answer(answer) != correct_answer
+    assert not item.verify_answer(answer).is_correct()
 
 
 def test_db_super_effective_attack():
@@ -50,32 +49,6 @@ def test_db_super_effective_defense():
 def test_db_super_effective_defense_dual_type_ground_water():
     item = quiz_items.SuperEffectiveDefenseDualType("Ground and Water")
     assert item.get_solution() == ["Grass"]
-
-
-def test_db_correct_quiz_response_on_completely_wrong_answer():
-    item = quiz_items.SuperEffectiveDefenseDualType("Ground and Water")
-    assert item.answer("Poison") == (
-        False,
-        "Grass is super effective against Ground and Water.",
-    )
-
-
-def test_db_correct_quiz_response_on_empty_answer():
-    item = quiz_items.SuperEffectiveDefenseDualType("Ground and Water")
-    assert item.answer("") == (
-        False,
-        "Grass is super effective against Ground and Water.",
-    )
-
-
-def test_db_correct_quiz_response_on_forgotten_answer():
-    item = quiz_items.SuperEffectiveDefense("Water")
-    assert item.answer("Electric") == (False, "You forgot Grass.")
-
-
-def test_db_correct_quiz_response_on_wrong_answer():
-    item = quiz_items.SuperEffectiveDefenseDualType("Ground and Water")
-    assert item.answer("Poison Grass") == (False, "You answered Poison wrong.")
 
 
 def test_db_super_effective_defense_dual_type_fire_ground():

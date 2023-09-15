@@ -40,3 +40,30 @@ def test_get_wrong_when_result_is_correct(correct_result):
 
 def test_get_wrong_when_result_is_incorrect(incorrect_result):
     assert incorrect_result.get_wrong() == {'Water'}
+
+
+def test_correct_result_reply(correct_result):
+    assert correct_result.get_reply() == 'That is correct!'
+
+
+def test_wrong_and_missing_give_full_solution_reply(incorrect_result):
+    replies = [
+            'The correct solution is Fire, Earth',
+            'The correct solution is Earth, Fire']
+    assert incorrect_result.get_reply() in replies
+
+
+def test_only_wrong_give_wrong_reply():
+    result = QuizItemResult(answer=['Fire', 'Foo', 'Bar'], solution=['Fire'])
+    replies = [
+            'You answered Foo, Bar wrong.',
+            'You answered Bar, Foo wrong.']
+    assert result.get_reply() in replies
+
+
+def test_only_missing_give_missing_reply():
+    result = QuizItemResult(answer=['Fire'], solution=['Fire', 'Foo', 'Bar'])
+    replies = [
+            'You forgot Foo, Bar.',
+            'You forgot Bar, Foo.']
+    assert result.get_reply() in replies

@@ -31,3 +31,20 @@ class QuizItemResult():
         Return what the answer got wrong, e.g. not part of the solution.
         """
         return self._answer - self._solution
+
+    def get_reply(self):
+        """
+        Return a reply which can be send to the player as feedback.
+        """
+        if self.is_correct():
+            return 'That is correct!'
+
+        missing = self.get_missing()
+        wrong = self.get_wrong()
+
+        if missing and wrong:
+            return 'The correct solution is ' + ', '.join(self._solution)
+        elif wrong:
+            return 'You answered ' + ', '.join(wrong) + ' wrong.'
+        else:
+            return 'You forgot ' + ', '.join(missing) + '.'
