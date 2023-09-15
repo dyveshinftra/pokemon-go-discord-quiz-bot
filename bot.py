@@ -16,7 +16,9 @@ intents.message_content = True
 
 
 bot = commands.Bot(
-    command_prefix=command_prefix, intents=intents, proxy=env.get("https_proxy")
+    command_prefix=command_prefix,
+    intents=intents,
+    proxy=env.get("https_proxy")
 )
 
 
@@ -77,7 +79,8 @@ async def start(
 ):
     global quiz
     await ctx.send(
-        f"Starting quiz. {questions=} {super_eff=} {not_very_eff=} {dual=} {weather=}"
+        f"Starting quiz. {questions=} {super_eff=} {not_very_eff=} {dual=} "
+        "{weather=}"
     )
     quiz = Quiz(
         questions=questions,

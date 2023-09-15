@@ -3,6 +3,9 @@ import pytest
 import quiz_items
 
 
+correct_answer = (True, "That is correct!")
+
+
 @pytest.fixture(params=quiz_items.get_all_quiz_item_classes())
 def item(request):
     return request.param()
@@ -22,16 +25,16 @@ def test_item_give_solution_is_well_formed(item):
 
 
 def test_item_empty_answer_is_not_correct(item):
-    assert item.answer("") != (True, "That is correct!")
+    assert item.answer("") != correct_answer
 
 
 def test_item_solution_is_correct(item):
-    assert item.answer(" ".join(item.get_solution())) == (True, "That is correct!")
+    assert item.answer(" ".join(item.get_solution())) == correct_answer
 
 
 def test_item_but_all_possible_solution_is_not_correct(item):
     answer = " ".join(item.get_all_possible_solutions())
-    assert item.answer(answer) != (True, "That is correct!")
+    assert item.answer(answer) != correct_answer
 
 
 def test_db_super_effective_attack():
@@ -92,7 +95,8 @@ def test_db_not_very_effective_defense():
 
 def test_db_not_very_effective_defense_dual_type_ground_water():
     item = quiz_items.NotVeryEffectiveDefenseDualType("Ground and Water")
-    assert item.get_solution() == ["Electric", "Fire", "Poison", "Rock", "Steel"]
+    solution = ["Electric", "Fire", "Poison", "Rock", "Steel"]
+    assert item.get_solution() == solution
 
 
 def test_db_not_very_effective_defense_dual_type_fire_ground():

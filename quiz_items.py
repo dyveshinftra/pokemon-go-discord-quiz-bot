@@ -89,7 +89,8 @@ class QuizItem(abc.ABC):
         elif not forgotten_answers:
             return (False, self.give_answered_wrong_answers(wrong_answers))
         elif not wrong_answers:
-            return (False, self.give_answered_forgotten_answers(forgotten_answers))
+            return (False,
+                    self.give_answered_forgotten_answers(forgotten_answers))
 
     @abc.abstractmethod
     def ask_question(self):
