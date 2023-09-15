@@ -80,7 +80,7 @@ async def start(
     global quiz
     await ctx.send(
         f"Starting quiz. {questions=} {super_eff=} {not_very_eff=} {dual=} "
-        "{weather=}"
+        f"{weather=}"
     )
     quiz = Quiz(
         questions=questions,
