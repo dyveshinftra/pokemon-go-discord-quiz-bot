@@ -16,16 +16,13 @@ class Quiz(abc.ABC):
         weather: bool,
     ):
         self.remaining_questions = []
+        classes = quiz_items.get_quiz_item_classes(
+            super_eff=super_eff,
+            not_very_eff=not_very_eff,
+            weather=weather,
+        )
         for _ in range(questions):
-            self.remaining_questions.append(
-                random.choice(
-                    quiz_items.get_quiz_item_classes(
-                        super_eff=super_eff,
-                        not_very_eff=not_very_eff,
-                        weather=weather,
-                    )
-                )()
-            )
+            self.remaining_questions.append(random.choice(classes)())
         self.questions = int(questions)
         self.score = 0
 
