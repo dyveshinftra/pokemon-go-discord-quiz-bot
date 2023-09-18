@@ -11,10 +11,10 @@ class Quiz(abc.ABC):
     def __init__(
         self,
         questions,
-        super_eff: bool = True,
-        not_very_eff: bool = True,
-        dual: bool = True,
-        weather: bool = True,
+        super_eff: bool,
+        not_very_eff: bool,
+        dual: bool,
+        weather: bool,
     ):
         self.remaining_questions = []
         for _ in range(questions):
