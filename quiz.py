@@ -11,9 +11,8 @@ class Quiz(abc.ABC):
     def __init__(
         self,
         questions,
-        super_eff: bool,
-        not_very_eff: bool,
-        dual: bool,
+        super_eff: int,
+        not_very_eff: int,
         weather: bool,
     ):
         self.remaining_questions = []
@@ -23,7 +22,6 @@ class Quiz(abc.ABC):
                     quiz_items.get_quiz_item_classes(
                         super_eff=super_eff,
                         not_very_eff=not_very_eff,
-                        dual=dual,
                         weather=weather,
                     )
                 )()

@@ -74,19 +74,17 @@ async def start(
     questions: int = 5,
     super_eff: int = 1,
     not_very_eff: int = 0,
-    dual: int = 0,
     weather: int = 0,
 ):
     global quiz
     await ctx.send(
-        f"Starting quiz. {questions=} {super_eff=} {not_very_eff=} {dual=} "
+        f"Starting quiz. {questions=} {super_eff=} {not_very_eff=} "
         f"{weather=}"
     )
     quiz = Quiz(
         questions=questions,
-        super_eff=bool(super_eff),
-        not_very_eff=bool(not_very_eff),
-        dual=bool(dual),
+        super_eff=super_eff,
+        not_very_eff=not_very_eff,
         weather=bool(weather),
     )
     await ctx.send(quiz.ask_question())

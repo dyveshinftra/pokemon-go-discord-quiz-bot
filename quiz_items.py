@@ -13,24 +13,21 @@ def get_all_quiz_item_classes():
 
 
 def get_quiz_item_classes(
-    super_eff: bool = True,
-    not_very_eff: bool = True,
-    dual: bool = True,
+    super_eff: int,
+    not_very_eff: int,
     weather: bool = True,
 ):
     classes = []
-    if super_eff:
+    if super_eff in [1, 3]:
         classes.append(SuperEffectiveAttack)
         classes.append(SuperEffectiveDefense)
-        if dual:
-            classes.append(SuperEffectiveDefenseDualType)
-    if not_very_eff:
+    if super_eff in [2, 3]:
+        classes.append(SuperEffectiveDefenseDualType)
+    if not_very_eff in [1, 3]:
         classes.append(NotVeryEffectiveAttack)
         classes.append(NotVeryEffectiveDefense)
-        if dual:
-            classes.append(NotVeryEffectiveDefenseDualType)
-    if not super_eff and not not_very_eff and dual:
-        classes.append(SuperEffectiveDefenseDualType)
+    if not_very_eff in [2, 3]:
+        classes.append(NotVeryEffectiveDefenseDualType)
     if weather:
         classes.append(WeatherBoost)
 
