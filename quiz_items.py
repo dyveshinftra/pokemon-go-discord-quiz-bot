@@ -5,7 +5,6 @@ import abc
 import random
 
 import pogoapi
-
 from quiz_item_result import QuizItemResult
 
 
@@ -30,6 +29,8 @@ def get_quiz_item_classes(
         classes.append(NotVeryEffectiveDefense)
         if dual:
             classes.append(NotVeryEffectiveDefenseDualType)
+    if not super_eff and not not_very_eff and dual:
+        classes.append(SuperEffectiveDefenseDualType)
     if weather:
         classes.append(WeatherBoost)
 
