@@ -5,6 +5,7 @@ from discord.ext import commands
 
 import env
 import pogoapi
+from player import get_all_player_stats, get_current_player_stats
 from quiz import Quiz
 from type import Type
 
@@ -34,7 +35,6 @@ async def on_ready():
 @bot.event
 async def on_message(message):
     global quiz
-
     # ignore when it's from us
     if message.author == bot.user:
         return
@@ -50,7 +50,9 @@ async def on_message(message):
 
     # check answer if quiz is ongoing
     if quiz:
-        await message.channel.send(quiz.answer(message.content))
+        await message.channel.send(
+            quiz.answer(message.author, message.content)
+        )
         if quiz.has_remaining_questions():
             await message.channel.send(quiz.ask_question())
         else:
@@ -104,6 +106,17 @@ async def type(ctx, arg):
         if types:
             types = ", ".join(map(str, types))
             await ctx.send(f"{arg} is {effect} against {types}")
+
+
+@bot.command()
+async def stats(
+    ctx,
+    everyone: int = 1,
+):
+    if everyone:
+        await ctx.send(get_all_player_stats())
+    else:
+        await ctx.send(get_current_player_stats(ctx.author))
 
 
 bot.run(env.get("DISCORD_TOKEN"))

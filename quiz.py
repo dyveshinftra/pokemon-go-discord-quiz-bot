@@ -1,10 +1,8 @@
-# A quiz item is a quiz question plus the corresponding answer.
-
-
 import abc
 import random
 
 import quiz_items
+from player import get_player
 
 
 class Quiz(abc.ABC):
@@ -33,8 +31,9 @@ class Quiz(abc.ABC):
         self.quiz_item = self.remaining_questions.pop()
         return self.quiz_item.ask_question()
 
-    def answer(self, content):
+    def answer(self, player_name: str, content: str):
         result = self.quiz_item.verify_answer(content)
+        get_player(player_name).answer(result.is_correct())
         if result.is_correct():
             self.score += 1
         return result.get_reply()
