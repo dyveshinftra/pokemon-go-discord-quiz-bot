@@ -88,6 +88,7 @@ async def start(
         super_eff=super_eff,
         not_very_eff=not_very_eff,
         weather=bool(weather),
+        player_name=ctx.author,
     )
     await ctx.send(quiz.ask_question())
 
@@ -117,6 +118,18 @@ async def stats(
         await ctx.send(get_all_player_stats())
     else:
         await ctx.send(get_current_player_stats(ctx.author))
+
+
+@bot.command()
+async def join(
+    ctx,
+):
+    global quiz
+    if quiz:
+        quiz.join(ctx.author)
+        await ctx.send("You join the current quiz")
+    else:
+        await ctx.send("No quiz in progress, use /start to start a quiz")
 
 
 bot.run(env.get("DISCORD_TOKEN"))

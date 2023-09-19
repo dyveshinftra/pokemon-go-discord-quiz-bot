@@ -2,7 +2,7 @@ import abc
 import random
 
 import quiz_items
-from player import get_player
+from player import Player, get_player
 
 
 class Quiz(abc.ABC):
@@ -12,6 +12,7 @@ class Quiz(abc.ABC):
         super_eff: int,
         not_very_eff: int,
         weather: bool,
+        player_name,
     ):
         self.remaining_questions = []
         classes = quiz_items.get_quiz_item_classes(
@@ -22,7 +23,15 @@ class Quiz(abc.ABC):
         for _ in range(questions):
             self.remaining_questions.append(random.choice(classes)())
         self.questions = int(questions)
-        self.score = 0
+        self.players_answered: list[Player] = []
+        self.players: dict[str, Player] = {}
+        self.join(player_name)
+
+    def join(self, name):
+        player = get_player(name)
+        player.current_quiz_score
+        self.players[name] = player
+        player.current_quiz_score = 0
 
     def has_remaining_questions(self):
         return bool(self.remaining_questions)
@@ -33,10 +42,19 @@ class Quiz(abc.ABC):
 
     def answer(self, player_name: str, content: str):
         result = self.quiz_item.verify_answer(content)
-        get_player(player_name).answer(result.is_correct())
-        if result.is_correct():
-            self.score += 1
-        return result.get_reply()
+        player = self.players.get(player_name)
+        if not player:
+            return "You are not joined in the quiz, to join type /join"
+        if player in self.players_answered:
+            return "You have already answered this question, wait for the other players"
+        player.answer(result.is_correct())
+        self.players_answered.append(player)
+        if len(self.players_answered) == len(self.players):
+            self.players_answered = []
+            return result.get_reply()
+        else:
+            return "We registered your answer, wait for the other players"
 
     def show_score(self):
-        return f"You scored {self.score} out of {self.questions}"
+        for player in self.players.values():
+            return f"{player.name} scored {player.current_quiz_score} out of {self.questions}"

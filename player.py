@@ -10,12 +10,14 @@ class Player(abc.ABC):
         self.biggest_streak = 0
         self.score = 0
         self.questions = 0
+        self.current_quiz_score = 0
         self.name = name
 
     def answer(self, was_right):
         self.questions += 1
         if was_right:
             self.score += 1
+            self.current_quiz_score += 1
             self.current_streak += 1
             if self.current_streak > self.biggest_streak:
                 self.biggest_streak = self.current_streak
