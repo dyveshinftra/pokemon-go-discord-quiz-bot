@@ -81,7 +81,7 @@ async def start(
     global quiz
     await ctx.send(
         f"Starting quiz. {questions=} {super_eff=} {not_very_eff=} "
-        f"{weather=}"
+        f"{weather=}\n Other players can join by using /join"
     )
     quiz = Quiz(
         questions=questions,
