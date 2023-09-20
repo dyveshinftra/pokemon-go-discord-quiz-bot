@@ -49,15 +49,10 @@ async def on_message(message):
         return
 
     # check answer if quiz is ongoing
-    if quiz:
+    if quiz and not quiz.is_finished:
         await message.channel.send(
             quiz.answer(message.author, message.content)
         )
-        if quiz.has_remaining_questions():
-            await message.channel.send(quiz.ask_question())
-        else:
-            await message.channel.send(quiz.show_score())
-            quiz = None
     else:
         await message.channel.send(
             "No quiz in progress, start a new quiz by using /start"
@@ -125,7 +120,7 @@ async def join(
     ctx,
 ):
     global quiz
-    if quiz:
+    if quiz and not quiz.is_finished:
         quiz.join(ctx.author)
         await ctx.send("You join the current quiz")
     else:

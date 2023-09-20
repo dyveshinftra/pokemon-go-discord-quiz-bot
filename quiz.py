@@ -15,6 +15,7 @@ class Quiz(abc.ABC):
         player_name,
     ):
         self.remaining_questions = []
+        self.is_finished = False
         classes = quiz_items.get_quiz_item_classes(
             super_eff=super_eff,
             not_very_eff=not_very_eff,
@@ -29,7 +30,6 @@ class Quiz(abc.ABC):
 
     def join(self, name):
         player = get_player(name)
-        player.current_quiz_score
         self.players[name] = player
         player.current_quiz_score = 0
 
@@ -49,11 +49,18 @@ class Quiz(abc.ABC):
             return "You have already answered this question, wait for the other players"
         player.answer(result.is_correct())
         self.players_answered.append(player)
-        if len(self.players_answered) == len(self.players):
-            self.players_answered = []
-            return result.get_reply()
-        else:
+        if len(self.players_answered) != len(self.players):
             return "We registered your answer, wait for the other players"
+
+        # All players have answered, ask next question
+        self.players_answered = []
+        s = f"{result.get_reply()}\n"
+        if self.has_remaining_questions():
+            s += self.ask_question()
+        else:
+            s += self.show_score()
+            self.is_finished = True
+        return s
 
     def show_score(self):
         for player in self.players.values():
