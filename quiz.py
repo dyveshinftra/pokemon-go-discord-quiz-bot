@@ -63,5 +63,10 @@ class Quiz(abc.ABC):
         return s
 
     def show_score(self):
+        s = ""
         for player in self.players.values():
-            return f"{player.name} scored {player.current_quiz_score} out of {self.questions}"
+            s += (
+                f"{player.name} scored {player.current_quiz_score}"
+                f" out of {self.questions}"
+            )
+        return s
