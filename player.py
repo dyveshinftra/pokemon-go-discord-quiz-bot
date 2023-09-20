@@ -11,6 +11,7 @@ class Player(abc.ABC):
         self.score = 0
         self.questions = 0
         self.current_quiz_score = 0
+        self.current_quiz_questions = 0
         self.name = name
 
     def answer(self, was_right):

@@ -16,6 +16,7 @@ class Quiz(abc.ABC):
     ):
         self.remaining_questions = []
         self.is_finished = False
+        self.quiz_item = None
         classes = quiz_items.get_quiz_item_classes(
             super_eff=super_eff,
             not_very_eff=not_very_eff,
@@ -32,9 +33,16 @@ class Quiz(abc.ABC):
         player = get_player(name)
         self.players[name] = player
         player.current_quiz_score = 0
+        player.current_quiz_questions = self.get_unanswered_questions()
 
     def has_remaining_questions(self):
         return bool(self.remaining_questions)
+
+    def get_unanswered_questions(self):
+        if self.quiz_item:
+            return len(self.remaining_questions) + 1
+        else:
+            return len(self.remaining_questions)
 
     def ask_question(self):
         self.quiz_item = self.remaining_questions.pop()
@@ -67,6 +75,6 @@ class Quiz(abc.ABC):
         for player in self.players.values():
             s += (
                 f"{player.name} scored {player.current_quiz_score}"
-                f" out of {self.questions}"
+                f" out of {player.current_quiz_questions}\n"
             )
         return s
