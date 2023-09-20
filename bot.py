@@ -44,15 +44,19 @@ async def on_message(message):
         await bot.process_commands(message)
         return
 
+    # handle commands
+    if message.content.startswith("sam"):
+        author = "sam"
+    else:
+        author = message.author
+
     # only watch the quiz channel
     if message.channel.name != "quiz":
         return
 
     # check answer if quiz is ongoing
     if quiz and not quiz.is_finished:
-        await message.channel.send(
-            quiz.answer(message.author, message.content)
-        )
+        await message.channel.send(quiz.answer(author, message.content))
     else:
         await message.channel.send(
             "No quiz in progress, start a new quiz by using /start"
@@ -116,12 +120,10 @@ async def stats(
 
 
 @bot.command()
-async def join(
-    ctx,
-):
+async def join(ctx, author=None):
     global quiz
     if quiz and not quiz.is_finished:
-        quiz.join(ctx.author)
+        quiz.join(author or ctx.author)
         await ctx.send("You join the current quiz")
     else:
         await ctx.send("No quiz in progress, use /start to start a quiz")
