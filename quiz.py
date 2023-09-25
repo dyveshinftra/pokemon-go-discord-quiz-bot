@@ -54,7 +54,8 @@ class Quiz(abc.ABC):
         if not player:
             return "You are not joined in the quiz, to join type /join"
         if player in self.players_answered:
-            return "You have already answered this question, wait for the other players"
+            return "You have already answered this question, "
+            "wait for the other players"
         player.answer(result.is_correct())
         self.players_answered.append(player)
         if len(self.players_answered) != len(self.players):

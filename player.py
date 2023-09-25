@@ -28,7 +28,10 @@ class Player(abc.ABC):
     def get_stats(self):
         biggest_streak = self.biggest_streak
         current_streak = self.current_streak
-        return f"{self.name}\n{current_streak=}\n{biggest_streak=}\nScore = {self.score}/{self.questions}\n"
+        return f"""{self.name}
+{current_streak=}
+{biggest_streak=}
+Score = {self.score}/{self.questions}"""
 
 
 players: dict[str, Player] = {}
