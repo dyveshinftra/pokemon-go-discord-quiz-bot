@@ -48,7 +48,7 @@ async def on_message(message):
     if message.content.startswith("sam"):
         author = "sam"
     else:
-        author = message.author
+        author = str(message.author)
 
     # only watch the quiz channel
     if message.channel.name != "quiz":
@@ -87,7 +87,7 @@ async def start(
         super_eff=super_eff,
         not_very_eff=not_very_eff,
         weather=bool(weather),
-        player_name=ctx.author,
+        player_name=str(ctx.author),
     )
     await ctx.send(quiz.ask_question())
 
@@ -116,14 +116,14 @@ async def stats(
     if everyone:
         await ctx.send(get_all_player_stats())
     else:
-        await ctx.send(get_current_player_stats(ctx.author))
+        await ctx.send(get_current_player_stats(str(ctx.author)))
 
 
 @bot.command()
 async def join(ctx, author=None):
     global quiz
     if quiz and not quiz.is_finished:
-        quiz.join(author or ctx.author)
+        quiz.join(author or str(ctx.author))
         await ctx.send("You join the current quiz")
     else:
         await ctx.send("No quiz in progress, use /start to start a quiz")

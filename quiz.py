@@ -25,7 +25,8 @@ class Quiz(abc.ABC):
         for _ in range(questions):
             self.remaining_questions.append(random.choice(classes)())
         self.questions = int(questions)
-        self.players_answered: list[Player] = []
+        self.players_answered_correctly: list[str] = []
+        self.players_answered_falsly: list[str] = []
         self.players: dict[str, Player] = {}
         self.join(player_name)
 
@@ -48,27 +49,56 @@ class Quiz(abc.ABC):
         self.quiz_item = self.remaining_questions.pop()
         return self.quiz_item.ask_question()
 
+    def show_answers_multiple_players(self):
+        # All players have answered, ask next question
+        s = ""
+        if self.players_answered_correctly:
+            names = ",".join(self.players_answered_correctly)
+            s += f"{names} answered correctly\n"
+        if self.players_answered_falsly:
+            names = ",".join(self.players_answered_falsly)
+            s += f"{names} answered incorrectly\n"
+            s += f"{self.quiz_item.get_readible_solution()}\n"
+        return s
+
+    def show_next_question(self):
+        if self.has_remaining_questions():
+            return self.ask_question()
+        else:
+            self.is_finished = True
+            return self.show_score()
+
     def answer(self, player_name: str, content: str):
+        if not self.quiz_item:
+            return ""
         result = self.quiz_item.verify_answer(content)
         player = self.players.get(player_name)
         if not player:
             return "You are not joined in the quiz, to join type /join"
-        if player in self.players_answered:
+        if player in [
+            self.players_answered_correctly,
+            self.players_answered_falsly,
+        ]:
             return "You have already answered this question, "
             "wait for the other players"
-        player.answer(result.is_correct())
-        self.players_answered.append(player)
-        if len(self.players_answered) != len(self.players):
+        is_correct = result.is_correct()
+        player.answer(is_correct)
+        if is_correct:
+            self.players_answered_correctly.append(player_name)
+        else:
+            self.players_answered_falsly.append(player_name)
+        if len(self.players_answered_correctly) + len(
+            self.players_answered_falsly
+        ) != len(self.players):
             return "We registered your answer, wait for the other players"
 
-        # All players have answered, ask next question
-        self.players_answered = []
-        s = f"{result.get_reply()}\n"
-        if self.has_remaining_questions():
-            s += self.ask_question()
+        if len(self.players) > 1:
+            s = self.show_answers_multiple_players()
         else:
-            s += self.show_score()
-            self.is_finished = True
+            s = result.get_reply() + "\n"
+        s += self.show_next_question()
+        self.players_answered_correctly = []
+        self.players_answered_falsly = []
         return s
 
     def show_score(self):

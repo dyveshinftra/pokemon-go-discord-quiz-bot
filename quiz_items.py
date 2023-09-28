@@ -51,6 +51,13 @@ class QuizItem(abc.ABC):
     def get_solution(self):
         return self.db[self._key]
 
+    def get_readible_solution(self, answer):
+        """
+        Return the correct solution
+        which can be send to the player as feedback.
+        """
+        return "The correct solution is " + ", ".join(self.get_solution())
+
     def verify_answer(self, answer):
         # split answer in words, capitalize them, and remove duplicates
         words = set(map(lambda w: w.capitalize(), answer.split()))
