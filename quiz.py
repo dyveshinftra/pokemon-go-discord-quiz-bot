@@ -82,7 +82,7 @@ class Quiz(abc.ABC):
             return "You have already answered this question, "
             "wait for the other players"
         is_correct = result.is_correct()
-        player.answer(is_correct)
+        player.answer(self.quiz_item.ask_question(), is_correct)
         if is_correct:
             self.players_answered_correctly.append(player_name)
         else:

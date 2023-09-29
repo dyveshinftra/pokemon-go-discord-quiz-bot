@@ -5,7 +5,12 @@ from discord.ext import commands
 
 import env
 import pogoapi
-from player import get_all_player_stats, get_current_player_stats
+from player import (
+    get_all_player_detail,
+    get_all_player_stats,
+    get_current_player_detail,
+    get_current_player_stats,
+)
 from quiz import Quiz
 from type import Type
 
@@ -117,6 +122,17 @@ async def stats(
         await ctx.send(get_all_player_stats())
     else:
         await ctx.send(get_current_player_stats(str(ctx.author)))
+
+
+@bot.command()
+async def detail(
+    ctx,
+    everyone: int = 0,
+):
+    if everyone:
+        await ctx.send(get_all_player_detail())
+    else:
+        await ctx.send(get_current_player_detail(str(ctx.author)))
 
 
 @bot.command()
