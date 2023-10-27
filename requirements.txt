@@ -1,0 +1,4 @@
+discord.py
+flake8
+pytest
+python-dotenv
